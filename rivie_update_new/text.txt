@@ -1,0 +1,43 @@
+    <div class="container my-5">
+        <form action="#" method="post">
+            <input type="text" placeholder="Search Data" name="search">
+            <button class="btn btn-dark btn-sm" name="submit">Search</button>
+        </form>
+        <div class="container my-5">
+      <table class="table">
+        <?php
+        if(isset($_POST['submit'])){
+            $search = $_POST['search'];
+
+            $sql = "Select * from 'users'";
+            $result = mysqli_query($con, $sql);
+            if($result)
+            {
+             if(mysqli_num_rows($result)>0){
+                echo '<thead>
+                        <tr>
+                        <th>id</th>
+                        <th>Name</th>
+                        <th>email</th>                      
+                        </tr>
+                        </thead>
+                        ';
+                        $row = mysqli_fetch_assoc($result);
+                        echo '<tbody>
+                               <tr>
+                               <td>'.row['id'].'</td>
+                               <td>'.row['name'].'</td>
+                               <td>'.row['email'].'</td>                               
+                               </tr>
+                               </tbody>
+                               ';
+             }else
+             {
+                echo '<h1>Data Not Found</h1>';
+             }             
+            }
+        }
+        ?>
+      </table>
+        </div>
+    </div>
