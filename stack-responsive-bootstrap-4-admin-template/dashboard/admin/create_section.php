@@ -19,20 +19,21 @@ function createSlug($string)
     $string = trim($string, '-'); // Trim hyphens from the beginning and end
     return $string;
 }
-if (isset($_POST['desig_save'])) {
+if (isset($_POST['section_save'])) {
 
-    $degis_title = $_REQUEST['degis_title'];
+    $section_title = $_REQUEST['section_title'];
     $org_id = $_REQUEST['org_id'];
-    $role_id = $_REQUEST['role_id'];
-    $slug = createSlug($degis_title);
-  
+    $subject_id = $_REQUEST['subject_id'];
+    $class_id = $_REQUEST['class_id'];
 
 
-    $sql = "INSERT INTO `designation`( `org_id`, `role_id`,`designation`, `slug`) VALUES ('$org_id','$role_id','$degis_title','$slug')";
+
+    $sql = "INSERT INTO `sub_section`(`section_title`, `org_id`, `sub_id`, `class_id`, `status`) 
+    VALUES ('$section_title','$org_id','$subject_id','$class_id','1')";
 
     if (mysqli_query($conn, $sql)) {
-        echo "<script>alert('New Designation Created')</script>";
-        echo "<script>window.location.replace('create_designation.php');</script>";
+        echo "<script>alert('New Section Created')</script>";
+        echo "<script>window.location.replace('create_section.php');</script>";
     } else {
         //   echo "Error: " . $sql . "<br>" . mysqli_error($conn);
 
@@ -81,7 +82,7 @@ if (isset($_POST['desig_save'])) {
                                 <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                                 <div class="heading-elements">
                                     <ul class="list-inline mb-0">
-                                    <li><a data-action="collapse" ><i data-feather="minus" class="feather icon-minus"></i></a></li>
+                                        <li><a data-action="collapse"><i data-feather="minus" class="feather icon-minus"></i></a></li>
                                         <li><a data-action="reload"><i data-feather="rotate-cw" class="feather icon-rotate-cw"></i></a></li>
                                         <li><a data-action="expand"><i data-feather="maximize" class="feather icon-maximize"></i></a></li>
                                         <li><a data-action="close"><i data-feather="x" class="feather icon-x"></i></a></li>
@@ -124,7 +125,7 @@ if (isset($_POST['desig_save'])) {
                                                     <div class="form-group">
                                                         <label for="projectinput1">Class</label>
                                                         <select class="form-control" name="class_id" id="class_id">
-                                             
+                                                            <option value=""> Select Class</option>
                                                         </select>
                                                         <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
                                                     </div>
@@ -133,16 +134,16 @@ if (isset($_POST['desig_save'])) {
                                                     <div class="form-group">
                                                         <label for="projectinput1">Subject</label>
                                                         <select class="form-control" name="subject_id" id="subject_id">
-                                             
+                                                            <option value=""> Select Section</option>
                                                         </select>
                                                         <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
                                                     </div>
                                                 </div>
-                                             
+
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label for="projectinput2">Section Title</label>
-                                                        <input type="text" id="degis_title" class="form-control" placeholder="Designation Title" name="degis_title">
+                                                        <input type="text" id="section_title" class="form-control" placeholder="Designation Title" name="section_title">
                                                     </div>
                                                 </div>
 
@@ -155,7 +156,7 @@ if (isset($_POST['desig_save'])) {
                                                 <button type="reset" class="btn btn-warning mr-1">
                                                     <i class="feather icon-x"></i> Cancel
                                                 </button>
-                                                <button type="submit" class="btn btn-primary" name="desig_save">
+                                                <button type="submit" class="btn btn-primary" name="section_save">
                                                     <i class="fa fa-check-square-o"></i> Save
                                                 </button>
                                             </div>
@@ -177,39 +178,43 @@ if (isset($_POST['desig_save'])) {
 <!-- END: Content-->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
-    // When organization or role is selected, fetch classes
-    $("#org_id").change(function() {
-        var orgId = $("#org_id").val();
-        
-        $.ajax({
-            type: "POST",
-            url: "ajax/get_class.php", // Path to the fetch_classes.php script
-            data: { org_id: orgId },
-            dataType: "json",
-            success: function(data) {
-                // Populate class select
-                $("#class_id").html(data.classes);
-            }
-        });
-    });
+    $(document).ready(function() {
+        // When organization or role is selected, fetch classes
+        $("#org_id").change(function() {
+            var orgId = $("#org_id").val();
 
-    $("#class_id").change(function() {
-        var class_id = $("#class_id").val();
-        
-        $.ajax({
-            type: "POST",
-            url: "ajax/get_subject.php", // Path to the fetch_classes.php script
-            data: { class_id: class_id },
-            dataType: "json",
-            success: function(data) {
-                // Populate class select
-                $("#subject_id").html(data.subject);
-            }
+            $.ajax({
+                type: "POST",
+                url: "ajax/get_class.php", // Path to the fetch_classes.php script
+                data: {
+                    org_id: orgId
+                },
+                dataType: "json",
+                success: function(data) {
+                    // Populate class select
+                    $("#class_id").html(data.classes);
+                }
+            });
         });
+
+        $("#class_id").change(function() {
+            var class_id = $("#class_id").val();
+
+            $.ajax({
+                type: "POST",
+                url: "ajax/get_subject.php", // Path to the fetch_classes.php script
+                data: {
+                    class_id: class_id
+                },
+                dataType: "json",
+                success: function(data) {
+                    // Populate class select
+                    $("#subject_id").html(data.subject);
+                }
+            });
+        });
+
     });
- 
-});
 </script>
 
 

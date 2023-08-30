@@ -267,7 +267,7 @@ License: You must have a valid license purchased only from themeforest(the above
           <li><a class="menu-item" href="create_chapter.php" data-i18n="eCommerce">Create Chapter</a>
           </li>
 
-          <li><a class="menu-item" href="manage_chapterphp" data-i18n="eCommerce">Manage Chapter</a>
+          <li><a class="menu-item" href="manage_chapter.php" data-i18n="eCommerce">Manage Chapter</a>
           
           </li>
           
@@ -281,7 +281,7 @@ License: You must have a valid license purchased only from themeforest(the above
           <li><a class="menu-item" href="create_exam_question.php" data-i18n="eCommerce">Create Question</a>
           </li>
 
-          <li><a class="menu-item" href="create_org.php" data-i18n="eCommerce">Manage Question</a>
+          <li><a class="menu-item" href="manage_exam_question.php" data-i18n="eCommerce">Manage Question</a>
           <li><a class="menu-item" href="test_list.php" data-i18n="eCommerce">Test List</a>
           </li>
           </li>

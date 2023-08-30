@@ -21,6 +21,14 @@ function createSlug($string)
 }
 if (isset($_POST['exam_que_save'])) {
 
+
+    $org_id = $_REQUEST['org_id'];
+    $class_id = $_REQUEST['class_id'];
+    $subject_id = $_REQUEST['subject_id'];
+    $section_id = $_REQUEST['section_id'];
+    $chapter_id = $_REQUEST['chapter_id'];
+    $exam_type = $_REQUEST['exam_type'];
+
     $exam_que = $_REQUEST['exam_que'];
     $exam_id = $_REQUEST['exam_id'];
     $opt1 = $_REQUEST['opt1'];
@@ -32,8 +40,8 @@ if (isset($_POST['exam_que_save'])) {
 
 
 
-    $sql = "INSERT INTO `exam_question`(`exam_id`, `exam_ques`, `opt1`, `opt2`, `opt3`, `opt4`,`corect_opt`, `status`) 
-    VALUES ('$exam_id','$exam_que','$opt1','$opt2','$opt3','$opt4','$correct_opt','1')";
+    $sql = "INSERT INTO `exam_question`(`org_id`, `class_id`, `subject_id`, `section_id`, `chapter_id`, `exam_id`, `exam_type`, `exam_ques`, `opt1`, `opt2`, `opt3`, `opt4`, `corect_opt`, `status`) 
+    VALUES ('$org_id','$class_id','$subject_id','$section_id','$chapter_id','$exam_id','$exam_type','$exam_que','$opt1','$opt2','$opt3','$opt4','$correct_opt','1')";
 
     if (mysqli_query($conn, $sql)) {
         echo "<script>alert('Question Created')</script>";
@@ -102,20 +110,20 @@ if (isset($_POST['exam_que_save'])) {
                                         <div class="form-body">
                                             <h4 class="form-section"><i class="feather icon-user"></i> User Info</h4>
                                             <div class="row">
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label for="projectinput1">Exam Id</label>
-                                                        <select class="form-control" name="exam_id" id="exam_id">
+                                                        <label for="projectinput1">Organisation Id</label>
+                                                        <select class="form-control" name="org_id" id="org_id">
                                                             <?php
                                                             // print_r($conn);
                                                             // die();
-                                                            $sql = "SELECT * FROM exam_title";
+                                                            $sql = "SELECT * FROM organisation";
                                                             $result = mysqli_query($conn, $sql);
                                                             if (mysqli_num_rows($result) > 0) {
                                                                 // output data of each row
 
                                                                 while ($row = mysqli_fetch_assoc($result)) { ?>
-                                                                    <option value="<?php echo $row['id']; ?>"><?php echo $row['exam_name']; ?></option>
+                                                                    <option value="<?php echo $row['id']; ?>"><?php echo $row['org_name']; ?></option>
 
                                                             <?php
 
@@ -125,14 +133,78 @@ if (isset($_POST['exam_que_save'])) {
                                                         <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
                                                     </div>
                                                 </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="projectinput1">Class</label>
+                                                        <select class="form-control" name="class_id" id="class_id">
+                                                            <option value=""> Select Class</option>
+                                                        </select>
+                                                        <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="projectinput1">Subject</label>
+                                                        <select class="form-control" name="subject_id" id="subject_id">
+                                                            <option value=""> Select Subject</option>
+                                                        </select>
+                                                        <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
+                                                    </div>
+                                                </div>
 
-                                                <div class="col-md-8">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="projectinput1">Section</label>
+                                                        <select class="form-control" name="section_id" id="section_id">
+                                                            <option value=""> Select Section</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="projectinput1">Chapter</label>
+                                                        <select class="form-control" name="chapter_id" id="chapter_id">
+                                                            <option value=""> Select Chapter</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="projectinput1">Exam Id</label>
+                                                        <select class="form-control" name="exam_id" id="exam_id">
+                                                            <option value=""> Select 
+                                                                Exam
+                                                            </option>
+                                                        </select>
+                                                        <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="projectinput1">Exam Type</label>
+                                                        <select class="form-control" name="exam_type" id="exam_type">
+                                                            
+                                                            <option value=""> Select Exam Type</option>
+                                                            <option value="mcq"> MCQ</option>
+                                                            <option value="aptitude"> Aptitude</option>
+                                                            <option value="num_base"> Numerical Based</option>
+                                                        </select>
+                                                        <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                            <div class="row">
+                                            <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="projectinput2">Exam Question</label>
                                                         <input type="text" id="exam_que" class="form-control" placeholder="Exam Question" name="exam_que">
                                                     </div>
                                                 </div>
-
                                             </div>
 
                                             <div class="row">
@@ -162,7 +234,7 @@ if (isset($_POST['exam_que_save'])) {
                                                 </div>
                                             </div>
                                             <div class="row">
-                                            <div class="col-md-12">
+                                                <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="projectinput2">Correct Option</label>
                                                         <input type="text" id="opt1" class="form-control" placeholder="Correct Option" name="correct_opt">
@@ -199,6 +271,97 @@ if (isset($_POST['exam_que_save'])) {
 <!-- END: Content-->
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // When organization or role is selected, fetch classes
+        $("#org_id").change(function() {
+            var orgId = $("#org_id").val();
 
+            $.ajax({
+                type: "POST",
+                url: "ajax/get_class.php", // Path to the fetch_classes.php script
+                data: {
+                    org_id: orgId
+                },
+                dataType: "json",
+                success: function(data) {
+                    // Populate class select
+                    $("#class_id").html(data.classes);
+                }
+            });
+        });
+
+        $("#class_id").change(function() {
+            var class_id = $("#class_id").val();
+
+            $.ajax({
+                type: "POST",
+                url: "ajax/get_subject.php", // Path to the fetch_classes.php script
+                data: {
+                    class_id: class_id
+                },
+                dataType: "json",
+                success: function(data) {
+                    // Populate class select
+                    $("#subject_id").html(data.subject);
+                }
+            });
+        });
+
+        $("#class_id").change(function() {
+            var subject_id = $("#class_id").val();
+
+            $.ajax({
+                type: "POST",
+                url: "ajax/get_section.php", // Path to the fetch_classes.php script
+                data: {
+                    subject_id: subject_id
+                },
+                dataType: "json",
+                success: function(data) {
+                    // Populate class select
+                    $("#section_id").html(data.section);
+                }
+            });
+        });
+
+        $("#subject_id").change(function() {
+            var subject_id = $("#subject_id").val();
+
+            $.ajax({
+                type: "POST",
+                url: "ajax/get_chapter.php", // Path to the fetch_classes.php script
+                data: {
+                    subject_id: subject_id
+                },
+                dataType: "json",
+                success: function(data) {
+                    // Populate class select
+                    $("#chapter_id").html(data.chapter);
+                }
+            });
+        });
+        $("#subject_id").change(function() {
+            var subject_id = $("#subject_id").val();
+
+            $.ajax({
+                type: "POST",
+                url: "ajax/get_exam.php", // Path to the fetch_classes.php script
+                data: {
+                    subject_id: subject_id
+                },
+                dataType: "json",
+                success: function(data) {
+                    // Populate class select
+                    $("#exam_id").html(data.exam);
+                }
+            });
+        });
+
+
+
+    });
+</script>
 
 <?php include "../common/footer.php"; ?>
