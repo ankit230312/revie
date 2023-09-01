@@ -231,4 +231,3 @@ $(document).ready(function() {
 <!-- ... (Rest of your HTML code) -->
 
 
-<?php include "../common/footer.php"; ?>
