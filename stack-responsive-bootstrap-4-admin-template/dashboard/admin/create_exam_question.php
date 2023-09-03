@@ -36,12 +36,15 @@ if (isset($_POST['exam_que_save'])) {
     $opt3 = $_REQUEST['opt3'];
     $opt4 = $_REQUEST['opt4'];
     $correct_opt = $_REQUEST['correct_opt'];
+
+    $marks = $_REQUEST['marks'];
+    $solution = $_REQUEST['solution'];
     // $slug = createSlug($degis_title);
 
 
 
-    $sql = "INSERT INTO `exam_question`(`org_id`, `class_id`, `subject_id`, `section_id`, `chapter_id`, `exam_id`, `exam_type`, `exam_ques`, `opt1`, `opt2`, `opt3`, `opt4`, `corect_opt`, `status`) 
-    VALUES ('$org_id','$class_id','$subject_id','$section_id','$chapter_id','$exam_id','$exam_type','$exam_que','$opt1','$opt2','$opt3','$opt4','$correct_opt','1')";
+    $sql = "INSERT INTO `exam_question`(`org_id`, `class_id`, `subject_id`, `section_id`, `chapter_id`, `exam_id`, `exam_type`, `exam_ques`, `opt1`, `opt2`, `opt3`, `opt4`, `corect_opt`,  `marks`,  `solution`, `status`) 
+    VALUES ('$org_id','$class_id','$subject_id','$section_id','$chapter_id','$exam_id','$exam_type','$exam_que','$opt1','$opt2','$opt3','$opt4','$correct_opt','$marks','$solution',1')";
 
     if (mysqli_query($conn, $sql)) {
         echo "<script>alert('Question Created')</script>";
@@ -234,10 +237,25 @@ if (isset($_POST['exam_que_save'])) {
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="projectinput2">Correct Option</label>
                                                         <input type="text" id="opt1" class="form-control" placeholder="Correct Option" name="correct_opt">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="projectinput2">Marks</label>
+                                                        <input type="text" id="marks" class="form-control" placeholder="Marks" name="marks">
+                                                    </div>
+                                                </div>
+                                              
+                                            </div>
+                                            <div class="row">
+                                            <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="projectinput2">Solution</label>
+                                                        <textarea  id="solution" class="form-control" placeholder="Solution" name="solution"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
