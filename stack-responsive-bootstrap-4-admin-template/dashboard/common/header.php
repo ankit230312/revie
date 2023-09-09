@@ -279,7 +279,9 @@
       </li>
       <li class=" nav-item"><a href="#"><i data-feather="users" class="feather icon-users"></i><span class="menu-title" data-i18n="Dashboard">Test Management</span><span class="badge badge badge-primary badge-pill float-right mr-2"></span></a>
         <ul class="menu-content">
-          <li><a class="menu-item" href="general_setting.php" data-i18n="eCommerce">Create Test</a>
+          <li><a class="menu-item" href="schedule_exam.php" data-i18n="eCommerce">
+            Schedule Exam
+          </a>
           </li>
           <li><a class="menu-item" href="create_org.php" data-i18n="eCommerce">Assign Test</a>
           </li>
