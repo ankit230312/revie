@@ -1,10 +1,7 @@
 <?php include "../common/header.php"; ?>
 
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rivi";
+include "db.php";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);

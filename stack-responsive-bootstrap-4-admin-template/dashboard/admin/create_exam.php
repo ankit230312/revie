@@ -1,10 +1,7 @@
 <?php include "../common/header.php"; ?>
 
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rivi";
+include "db.php";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 // Check connection
@@ -23,18 +20,19 @@ if (isset($_POST['exam_save'])) {
 
     $exam_title = $_REQUEST['exam_title'];
     $org_id = $_REQUEST['org_id'];
-    $class_id = $_REQUEST['class_id'];
-    $subject_id = $_REQUEST['subject_id'];
+    // $class_id = $_REQUEST['class_id'];
+    // $subject_id = $_REQUEST['subject_id'];
   
-    $class_id = $_REQUEST['class_id'];
+    // $class_id = $_REQUEST['class_id'];
     $slug = createSlug($exam_title);
 
 
 
-    $sql = "INSERT INTO `exam_title`(`org_id`, `class_id`, `suject_id`, `exam_name`,`slug`) 
-    VALUES ('$org_id','$class_id','$subject_id','$exam_title','$slug')";
+    $sql = "INSERT INTO `exam_title`(`org_id`, `exam_name`,`slug`) 
+    VALUES ('$org_id','$exam_title','$slug')";
 
     if (mysqli_query($conn, $sql)) {
+      
         echo "<script>alert('New Exam Created')</script>";
         echo "<script>window.location.replace('create_exam.php');</script>";
     } else {
@@ -81,7 +79,7 @@ if (isset($_POST['exam_save'])) {
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title" id="basic-layout-form">Create Subject</h4>
+                                <h4 class="card-title" id="basic-layout-form">Create Exam</h4>
                                 <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                                 <div class="heading-elements">
                                     <ul class="list-inline mb-0">
@@ -126,13 +124,13 @@ if (isset($_POST['exam_save'])) {
                                                 </div>
                                            
 
-                                                <div class="col-md-4">
+                                                <!-- <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="projectinput1">Class</label>
                                                         <select class="form-control" name="class_id" id="class_id">
                                                            
                                                         </select>
-                                                        <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
+                                                        
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -141,9 +139,9 @@ if (isset($_POST['exam_save'])) {
                                                         <select class="form-control" name="subject_id" id="subject_id">
                                                            
                                                         </select>
-                                                        <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
+                                                        
                                                     </div>
-                                                </div>
+                                                </div> -->
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="projectinput2">Exam Title</label>

@@ -1,3 +1,4 @@
+<?php  session_start(); ?>
 <!DOCTYPE html>
 
 <html class="loading" lang="en" data-textdirection="ltr">
@@ -227,7 +228,7 @@
           </li>
           <li><a class="menu-item" href="manage_designation.php" data-i18n="eCommerce">Manage Designation</a>
           </li>
-       
+
 
 
         </ul>
@@ -235,7 +236,11 @@
 
       <li class=" nav-item"><a href="#"><i data-feather="users" class="feather icon-users"></i><span class="menu-title" data-i18n="Dashboard">Quiz Setup</span><span class="badge badge badge-primary badge-pill float-right mr-2"></span></a>
         <ul class="menu-content">
-        <li><a class="menu-item" href="create_class.php" data-i18n="eCommerce">Create Class</a>
+        <li><a class="menu-item" href="create_exam.php" data-i18n="eCommerce">Create Exam</a>
+          </li>
+          <li><a class="menu-item" href="manage_exam.php" data-i18n="eCommerce">Manage Exam</a>
+          </li>
+          <li><a class="menu-item" href="create_class.php" data-i18n="eCommerce">Create Class</a>
           </li>
 
           <li><a class="menu-item" href="manage_class.php" data-i18n="eCommerce">Manage Class</a>
@@ -244,44 +249,48 @@
           </li>
 
           <li><a class="menu-item" href="manage_subject.php" data-i18n="eCommerce">Manage Subject</a>
-          
+
           </li>
-            <li><a class="menu-item" href="create_section.php" data-i18n="eCommerce">Create Section</a>
+          <!-- <li><a class="menu-item" href="create_section.php" data-i18n="eCommerce">Create Section</a>
           </li>
 
           <li><a class="menu-item" href="manage_section.php" data-i18n="eCommerce">Manage section</a>
-          
-          </li>
+
+          </li> -->
 
           <li><a class="menu-item" href="create_chapter.php" data-i18n="eCommerce">Create Chapter</a>
           </li>
 
           <li><a class="menu-item" href="manage_chapter.php" data-i18n="eCommerce">Manage Chapter</a>
-          
-          </li>
-          
-          
 
-          <li><a class="menu-item" href="create_exam.php" data-i18n="eCommerce">Create Exam</a>
-          </li>
-          <li><a class="menu-item" href="manage_exam.php" data-i18n="eCommerce">Manage Exam</a>
           </li>
 
-          <li><a class="menu-item" href="create_exam_question.php" data-i18n="eCommerce">Create Question</a>
+          <li><a class="menu-item" href="create_sub_chapter.php" data-i18n="eCommerce">Create Sub Chapter</a>
+          </li>
+
+          <li><a class="menu-item" href="manage_sub_chapter.php" data-i18n="eCommerce">Manage Sub Chapter</a>
+
+          </li>
+
+
+
+
+
+          <li><a class="menu-item" href="create_exam_pattern.php" data-i18n="eCommerce">Create Question</a>
           </li>
 
           <li><a class="menu-item" href="manage_exam_question.php" data-i18n="eCommerce">Manage Question</a>
           <li><a class="menu-item" href="test_list.php" data-i18n="eCommerce">Test List</a>
           </li>
-          </li>
+      </li>
 
-        </ul>
+      </ul>
       </li>
       <li class=" nav-item"><a href="#"><i data-feather="users" class="feather icon-users"></i><span class="menu-title" data-i18n="Dashboard">Test Management</span><span class="badge badge badge-primary badge-pill float-right mr-2"></span></a>
         <ul class="menu-content">
           <li><a class="menu-item" href="schedule_exam.php" data-i18n="eCommerce">
-            Schedule Exam
-          </a>
+              Schedule Exam
+            </a>
           </li>
           <li><a class="menu-item" href="create_org.php" data-i18n="eCommerce">Assign Test</a>
           </li>

@@ -4,10 +4,7 @@ $orgId = $_POST['org_id'];
 
 
 // Replace the following with your database connection code
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rivi";
+include "../db.php";
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
 // Fetch classes based on the selected organization and role

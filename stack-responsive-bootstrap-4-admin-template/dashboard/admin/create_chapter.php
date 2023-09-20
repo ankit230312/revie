@@ -1,10 +1,7 @@
 <?php include "../common/header.php"; ?>
 
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rivi";
+include "db.php";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 // Check connection
@@ -148,8 +145,6 @@ if (isset($_POST['chapter_save'])) {
                                                         <input type="text" id="chapter_title" class="form-control" placeholder="Designation Title" name="chapter_title">
                                                     </div>
                                                 </div>
-
-
                                             </div>
 
 

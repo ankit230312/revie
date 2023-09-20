@@ -1,0 +1,10 @@
+id,org_id,class_id,subject_id,section_id,chapter_id,exam_id,exam_type,exam_ques,opt1,opt2,opt3,opt4,marks,solution,corect_opt,status,created_at,updated_at
+41,10,11,8,3,1,5,mcq,Select the wrongly spelt word ?,dangerous ,amicable ,lethal ,powerful ,4,aa,lethal ,1,9/12/2023 23:03,9/12/2023 23:03
+42,10,11,8,3,1,5,mcq,Virulent ?,electric ,irrigation ,presure ,central ,4,aaa,irrigation ,1,9/12/2023 23:03,9/12/2023 23:03
+43,10,11,8,3,1,5,mcq,Select the correctly spelt word ?,whimsical ,contiguous ,spectaculer ,adjacent ,4,aa,Circueteous,1,9/12/2023 23:03,9/12/2023 23:03
+44,10,11,8,3,1,5,mcq,Select the wrongly spelt word ?,dangerous ,irrigation ,callous ,carriage ,4,aa,Essential,1,9/12/2023 23:03,9/12/2023 23:03
+45,org_id,class_id,subject_id,section_id,chapter_id,0,exam_type,exam_ques,opt1,opt2,opt3,opt4,marks,solution,corect_opt,st,9/13/2023 23:16,9/13/2023 23:16
+46,10,11,8,3,1,5,mcq,Select the wrongly spelt word ?,dangerous ,amicable ,lethal ,powerful ,4,aa,lethal ,1,9/13/2023 23:16,9/13/2023 23:16
+47,10,11,8,7,1,5,mcq,Virulent ?,electric ,irrigation ,presure ,central ,4,aaa,irrigation ,1,9/13/2023 23:16,9/13/2023 23:16
+48,10,11,8,3,1,5,mcq,Select the correctly spelt word ?,whimsical ,contiguous ,spectaculer ,adjacent ,4,aa,Circueteous,1,9/13/2023 23:16,9/13/2023 23:16
+49,10,11,8,7,1,5,mcq,Select the wrongly spelt word ?,dangerous ,irrigation ,callous ,carriage ,4,aa,Essential,1,9/13/2023 23:16,9/13/2023 23:16

@@ -1,10 +1,7 @@
 <?php include "../common/header.php"; ?>
 
 <?php 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rivi";
+include "db.php";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 // Check connection
@@ -28,9 +25,10 @@ $sql = "INSERT INTO `organisation`(`org_code`, `org_name`, `org_contact`, `org_e
 VALUES ('$org_code','$org_name','$org_contact','$org_email','$org_add','$org_abt','1')";
 
 if (mysqli_query($conn, $sql)) {
+    
   echo "<script>alert('New Organnisation Created')</script>";
 } else {
-//   echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+   echo "Error: " . $sql . "<br>" . mysqli_error($conn);
   
 }
 // header("location:create_org.php");
