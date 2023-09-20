@@ -1,9 +1,6 @@
 <?php include "../common/header.php"; ?>
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rivi";
+include "db.php";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -79,7 +76,7 @@ if (!$conn) {
                                                 $result = mysqli_query($conn, $sql);
                                                 // $get_org_name= "SELECT * FROM designation
                                                 // JOIN organisation ON designation.org_id =organisation.id";
-                                                
+
 
                                                 //  print_r($get_org_name);
                                                 // die();

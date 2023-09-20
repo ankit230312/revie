@@ -1,9 +1,6 @@
 <?php include "../common/header.php"; ?>
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rivi";
+include "db.php";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -57,9 +54,7 @@ if (!$conn) {
                                                 <tr>
                                                     <th>S.no</th>
                                                     <th>Organisation Name</th>
-                                                    <th>Class</th>
-
-                                                    <th>Subject</th>
+                                                   
                                                     <th>Exam Name</th>
 
                                                     <th>Action</th>
@@ -91,11 +86,9 @@ if (!$conn) {
 
                                                     while ($row = mysqli_fetch_assoc($result)) { ?>
                                                         <tr>
-                                                            <th> <?php echo $i++ ?></th>
+                                                            <th> <?php echo $i ?></th>
                                                             <td><?php echo $row['org_name']; ?></td>
-                                                            <td><?php echo $row['class']; ?></td>
-
-                                                            <td><?php echo $row['sub_name']; ?></td>
+                                                            
                                                             <td><?php echo $row['exam_name']; ?></td>
                                                             <td>
                                                                 <a href="update_org.php?org_id=<?php echo $row['id']; ?>" title="Edit" class="mr-1"><i class="fa fa-pencil" aria-hidden="true"></i></a>
@@ -118,16 +111,7 @@ if (!$conn) {
 
                                             </tbody>
                                             <tfoot>
-                                                <tr>
-                                                    <th>S.no</th>
-                                                    <th>Organisation Name</th>
-                                                    <th>Class</th>
-
-                                                    <th>Subject</th>
-                                                    <th>Exam Name</th>
-
-                                                    <th>Action</th>
-                                                </tr>
+                                              
                                             </tfoot>
                                         </table>
                                     </div>

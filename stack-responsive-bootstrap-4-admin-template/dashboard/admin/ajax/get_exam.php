@@ -1,17 +1,17 @@
 <?php
 // fetch_classes.php
-$subject_id = $_POST['subject_id'];
+$org_id = $_POST['org_id'];
 
-
+include "../db.php";
 // Replace the following with your database connection code
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rivi";
+// $servername = "localhost";
+// $username = "root";
+// $password = "";
+// $dbname = "rivi";
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
 // Fetch classes based on the selected organization and role
-$sql = "SELECT * FROM exam_title WHERE suject_id = '$subject_id'";
+$sql = "SELECT * FROM exam_title WHERE org_id = '$org_id'";
 $result = mysqli_query($conn, $sql);
 
 $sectionOption = "";

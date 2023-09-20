@@ -8,10 +8,7 @@ if (isset($_GET['table_name']) && isset($_GET['id'])) {
    
     function deleteData($tableName, $idToDelete)
     {
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "rivi";
+        include "db.php";
 
 
         $conn = new mysqli($servername, $username, $password, $dbname);

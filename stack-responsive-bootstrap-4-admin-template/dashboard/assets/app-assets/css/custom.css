@@ -59,3 +59,7 @@ form.form {
     background-color: #2879b3;
     color: #140f0f;
 }
+
+.no_pd{
+    padding: 19px 14px !important;
+}

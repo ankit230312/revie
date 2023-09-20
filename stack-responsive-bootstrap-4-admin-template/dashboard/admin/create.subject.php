@@ -1,10 +1,7 @@
 <?php include "../common/header.php"; ?>
 
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rivi";
+include "db.php";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 // Check connection
@@ -23,17 +20,19 @@ if (isset($_POST['class_save'])) {
 
     $sub_title = $_REQUEST['sub_title'];
     $org_id = $_REQUEST['org_id'];
-    $role_id = $_REQUEST['role_id'];
+    // $role_id = $_REQUEST['role_id'];
     $class_id = $_REQUEST['class_id'];
     $slug = createSlug($sub_title);
 
 
 
-    $sql = "INSERT INTO `subject`( `org_id`, `role_id`, `class_id`, `sub_name`, `slug`)
-     VALUES ('$org_id','$role_id','$class_id','$sub_title','$slug')";
+    $sql = "INSERT INTO `subject`( `org_id`,  `class_id`, `sub_name`, `slug`)
+     VALUES ('$org_id','$class_id','$sub_title','$slug')";
 
     if (mysqli_query($conn, $sql)) {
+        
         echo "<script>alert('New Subject Created')</script>";
+
         echo "<script>window.location.replace('create.subject.php');</script>";
     } else {
         //   echo "Error: " . $sql . "<br>" . mysqli_error($conn);
@@ -122,7 +121,7 @@ if (isset($_POST['class_save'])) {
                                                         <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <!-- <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="projectinput1">Role</label>
                                                         <select class="form-control" name="role_id" id="role_id">
@@ -146,15 +145,15 @@ if (isset($_POST['class_save'])) {
                                                                 }
                                                             } ?>
                                                         </select>
-                                                        <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
+
                                                     </div>
-                                                </div>
+                                                </div> -->
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="projectinput1">Class</label>
                                                         <select class="form-control" name="class_id" id="class_id">
-                                                           
+
                                                         </select>
                                                         <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
                                                     </div>
@@ -201,24 +200,26 @@ if (isset($_POST['class_save'])) {
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
-    // When organization or role is selected, fetch classes
-    $("#org_id").change(function() {
-        var orgId = $("#org_id").val();
-        
-        $.ajax({
-            type: "POST",
-            url: "ajax/get_class.php", // Path to the fetch_classes.php script
-            data: { org_id: orgId },
-            dataType: "json",
-            success: function(data) {
-                // Populate class select
-                $("#class_id").html(data.classes);
-            }
+    $(document).ready(function() {
+        // When organization or role is selected, fetch classes
+        $("#org_id").change(function() {
+            var orgId = $("#org_id").val();
+
+            $.ajax({
+                type: "POST",
+                url: "ajax/get_class.php", // Path to the fetch_classes.php script
+                data: {
+                    org_id: orgId
+                },
+                dataType: "json",
+                success: function(data) {
+                    // Populate class select
+                    $("#class_id").html(data.classes);
+                }
+            });
         });
+
     });
- 
-});
 </script>
 
 <!-- ... (Rest of your HTML code) -->

@@ -2,12 +2,12 @@
 // fetch_classes.php
 $class_id = $_POST['class_id'];
 
-
+include "../db.php";
 // Replace the following with your database connection code
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "rivi";
+// $servername = "localhost";
+// $username = "root";
+// $password = "";
+// $dbname = "rivi";
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
 // Fetch classes based on the selected organization and role
