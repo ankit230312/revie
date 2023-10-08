@@ -1,4 +1,4 @@
-<?php  session_start(); ?>
+<?php session_start(); ?>
 <!DOCTYPE html>
 
 <html class="loading" lang="en" data-textdirection="ltr">
@@ -36,7 +36,7 @@
   <link rel="stylesheet" type="text/css" href="../assets/app-assets/css/pages/card-statistics.min.css">
   <link rel="stylesheet" type="text/css" href="../assets/app-assets/css/pages/vertical-timeline.min.css">
   <!-- END: Page CSS-->
-
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
   <!-- BEGIN: Custom CSS-->
   <link rel="stylesheet" type="text/css" href="../assets/assets/css/style.css">
   <link rel="stylesheet" type="text/css" href="../assets/app-assets/css/custom.css">
@@ -236,7 +236,7 @@
 
       <li class=" nav-item"><a href="#"><i data-feather="users" class="feather icon-users"></i><span class="menu-title" data-i18n="Dashboard">Quiz Setup</span><span class="badge badge badge-primary badge-pill float-right mr-2"></span></a>
         <ul class="menu-content">
-        <li><a class="menu-item" href="create_exam.php" data-i18n="eCommerce">Create Exam</a>
+          <li><a class="menu-item" href="create_exam.php" data-i18n="eCommerce">Create Exam</a>
           </li>
           <li><a class="menu-item" href="manage_exam.php" data-i18n="eCommerce">Manage Exam</a>
           </li>
@@ -280,11 +280,21 @@
           </li>
 
           <li><a class="menu-item" href="manage_exam_question.php" data-i18n="eCommerce">Manage Question</a>
+
+          </li>
+
+          <li><a class="menu-item" href="exam_setup.php" data-i18n="eCommerce">
+            Exam Setup</a>
+          </li>
+
+          <li><a class="menu-item" href="manage_examSetup.php" data-i18n="eCommerce">Manage Exam Setup</a>
+
+          </li>
+
           <li><a class="menu-item" href="test_list.php" data-i18n="eCommerce">Test List</a>
           </li>
-      </li>
 
-      </ul>
+        </ul>
       </li>
       <li class=" nav-item"><a href="#"><i data-feather="users" class="feather icon-users"></i><span class="menu-title" data-i18n="Dashboard">Test Management</span><span class="badge badge badge-primary badge-pill float-right mr-2"></span></a>
         <ul class="menu-content">

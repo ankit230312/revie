@@ -9,117 +9,149 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// if (isset($_REQUEST['csv_up'])) {
+
+// if (isset($_POST['csv_upload'])) {
 //     if (isset($_FILES["csv_file"]) && $_FILES["csv_file"]["error"] == 0) {
 //         // Define the path to store the uploaded CSV file
 //         $upload_dir = "uploads/csv/";
-
 //         $upload_file = $upload_dir . basename($_FILES["csv_file"]["name"]);
-
-
-//         // Check if the file already exists
-//         if (file_exists($upload_file)) {
-//             echo "<script>alert('File already exists.')</script>";
-//         } else {
-//             // Move the uploaded file to the specified directory
-//             if (move_uploaded_file($_FILES["csv_file"]["tmp_name"], $upload_file)) {
-//                 // Process the CSV file and insert data into the database
-//                 $csv_data = array_map('str_getcsv', file($upload_file));
-//                     foreach ($csv_data as $row) {
-
-
-
-//                     $sql = "INSERT INTO `exam_question`(`org_id`, `class_id`, `subject_id`, `section_id`, `chapter_id`, `exam_id`, `exam_type`, `exam_ques`, `opt1`, `opt2`, `opt3`, `opt4`, `corect_opt`, `marks`, `solution`, `status`) 
-//                     VALUES ('$row[1]','$row[2]','$row[3]','$row[4]','$row[5]','$row[6]','$row[7]','$row[8]','$row[9]','$row[10]','$row[11]','$row[12]','$row[15]','$row[13]','$row[14]','$row[16]')";
-
-//                     if ($conn->query($sql) === TRUE) {
-//                         echo "<script>alert('Record inserted successfully')</script>";
-//                         echo "<script>window.location.replace('manage_exam_question.php');</script>";
-
-//                     } else {
-//                         echo "Error: " . $sql . "<br>" . $conn->error;
-//                     }
-//                 }
-//                 echo "<script>alert('File uploaded and data inserted successfully.')</script>";
-
-//             } else {
-//                 echo "<script>alert('Error uploading file.')</script>";
-
-//             }
-//         }
-//     } else {
-//         echo "<script>alert('No file uploaded or an error occurred.')</script>";
-
-//     }
-// }
-// else{
-//     echo "Check Again";
-// }
-// if (isset($_REQUEST['csv_upload'])) {
-//     if (isset($_FILES["csv_file"]) && $_FILES["csv_file"]["error"] == 0) {
-//         // Define the path to store the uploaded CSV file
-//         $upload_dir = "uploads/csv/";
-
-//         $upload_file = $upload_dir . basename($_FILES["csv_file"]["name"]);
-
-//         // Check if the file already exists
 
 //         // Move the uploaded file to the specified directory
 //         if (move_uploaded_file($_FILES["csv_file"]["tmp_name"], $upload_file)) {
-//             // Process the CSV file and insert/update data into the database
-//             $csv_data = array_map('str_getcsv', file($upload_file));
-//             echo "<pre>";
-//             // print_r($csv_data);
-//             // die();
-//             // Skip the first row as it contains headers
-//             $header = array_shift($csv_data);
+//             // Open the CSV file for reading
+//             $file_handle = fopen($upload_file, 'r');
 
-//             // Check if the session ID is available
-//             $session_id = $_SESSION['new_question_id'];
+//             // Check if the file was opened successfully
+//             if ($file_handle !== false) {
+//                 // Skip the header row
+//                 $header = fgetcsv($file_handle, 4000, ',');
 
-//             if (isset($session_id)) {
+//                 // Check if the session ID is available
+//                 $session_id = $_SESSION['new_question_id'];
 
-//                 $check = "select * from exam_question where id = $session_id}";
+//                 if (isset($session_id)) {
+//                     // Prepare the SQL statement for updating
+//                     $update_sql = "UPDATE `exam_question` SET                               
+//                             `exam_ques`=?, 
+//                             `opt1`=?, 
+//                             `opt2`=?, 
+//                             `opt3`=?, 
+//                             `opt4`=?, 
+//                             `corect_opt`=?, 
+//                             `marks`=?, 
+//                             `solution`=?, 
+//                             `status`=?
+//                             WHERE `id`=?";
 
+//                     $stmt_update = $conn->prepare($update_sql);
+//                     $insertedRecords = 0;
+//                     // Prepare the SQL statement for inserting
+//                     $insert_sql = "INSERT INTO `exam_question`(`org_id`, `class_id`, `subject_id`, `section_id`, `chapter_id`, `sub_chapter_id`, `exam_id`, `exam_type`, `exam_ques`, `opt1`, `opt2`, `opt3`, `opt4`, `corect_opt`, `marks`, `solution`, `status`) 
+//                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+//                     $stmt_insert = $conn->prepare($insert_sql);
 
-//                 foreach ($csv_data as $key => $row) {
-//                     // Assuming 'exam_id' is column 6
-//                     print_r($key);
+//                     // Read each line of the CSV file
+//                     while (($data_csv = fgetcsv($file_handle, 4000, ',')) !== FALSE) {
+//                         if (count($data_csv) == count($header)) {
+//                             if ($data_csv[1] == 1) {
+//                                 // This is the 2nd row, update it
+//                                 $stmt_update->bind_param(
+//                                     "ssssssssss",
+//                                     $data_csv[0],
+//                                     $data_csv[1],
+//                                     $data_csv[2],
+//                                     $data_csv[3],
+//                                     $data_csv[4],
+//                                     $data_csv[7],
+//                                     $data_csv[5],
+//                                     $data_csv[6],
+//                                     $data_csv[8],
+//                                     $session_id
+//                                 );
 
+//                                 if ($stmt_update->execute()) {
+//                                     echo "<script>alert('Record updated successfully')</script>";
+//                                 } else {
+//                                     echo "Error updating record: " . $stmt_update->error;
+//                                 }
+//                             } else {
 
-//                     // Update the 2nd row based on 'exam_id'
-//                     $sql = "UPDATE `exam_question` SET                               
-//                                     `exam_ques`='$row[9]', 
-//                                     `opt1`='$row[10]', 
-//                                     `opt2`='$row[11]', 
-//                                     `opt3`='$row[12]', 
-//                                     `opt4`='$row[13]', 
-//                                     `corect_opt`='$row[16]', 
-//                                     `marks`='$row[14]', 
-//                                     `solution`='$row[15]', 
-//                                     `status`='$row[17]'
-//                                     WHERE `exam_id`='$session_id'";
+//                                 $get_data = "select * from exam_question where id = {$_SESSION['new_question_id']}";
+//                                 $result = mysqli_query($conn, $get_data);
 
-//                     if ($conn->query($sql) === TRUE) {
-//                         echo "<script>alert('Record updated successfully')</script>";
-//                     } else {
-//                         echo "Error: " . $sql . "<br>" . $conn->error;
+//                                 $i = 1;
+
+//                                 if (mysqli_num_rows($result) > 0) {
+//                                     // output data of each row
+
+//                                     while ($row11 = mysqli_fetch_assoc($result)) {
+
+//                                         $sql = "INSERT INTO `exam_question`(`org_id`, `class_id`, `subject_id`, `section_id`, `chapter_id`, `sub_chapter_id`, `exam_id`, `exam_type`, `exam_ques`, `opt1`, `opt2`, `opt3`, `opt4`, `corect_opt`, `marks`, `solution`, `status`) 
+//                                                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//                                         $stmt_insert->bind_param(
+//                                             "sssssssssssssssss",
+//                                             $row11["org_id"],
+//                                             $row11["class_id"],
+//                                             $row11["subject_id"],
+//                                             $row11["section_id"],
+//                                             $row11["chapter_id"],
+//                                             $row11["sub_chapter_id"],
+//                                             $row11["exam_id"],
+//                                             $row11["exam_type"],
+//                                             $data_csv[0],
+//                                             $data_csv[1],
+//                                             $data_csv[2],
+//                                             $data_csv[3],
+//                                             $data_csv[4],
+//                                             $data_csv[7],
+//                                             $data_csv[5],
+//                                             $data_csv[6],
+//                                             $data_csv[8]
+//                                         );
+
+//                                         if ($stmt_insert->execute()) {
+//                                             $insertedRecord = array(
+//                                                 'exam_ques' => $data_csv[0],
+//                                                 'opt1' => $data_csv[1],
+//                                                 'opt2' => $data_csv[2],
+//                                                 'opt3' => $data_csv[3],
+//                                                 'opt4' => $data_csv[4],
+//                                                 'corect_opt' => $data_csv[7],
+//                                                 'marks' => $data_csv[5],
+//                                                 'solution' => $data_csv[6],
+//                                                 'status' => $data_csv[8]
+//                                             );
+//                                             $insertedRecordDetails[] = $insertedRecord;
+//                                             $insertedRecords++;
+//                                             // echo "<script>alert('Record inserted successfully')</script>";
+//                                         } else {
+//                                             echo "Error inserting record: " . $stmt->error;
+//                                         }
+//                                     }
+//                                 }
+//                                 // This is not the 2nd row, insert it
+
+//                             }
+//                         } else {
+//                             echo "Number of columns in CSV does not match header.";
+//                         }
 //                     }
 
-//                     // Insert the rest of the rows
-//                     $sql = "INSERT INTO `exam_question`(`org_id`, `class_id`, `subject_id`, `section_id`, `chapter_id`, `sub_chapter_id` ,`exam_id`, `exam_type`, `exam_ques`, `opt1`, `opt2`, `opt3`, `opt4`, `corect_opt`, `marks`, `solution`, `status`) 
-//                              VALUES ('$row[1]','$row[2]','$row[3]','$row[4]','$row[5]','$row[6]','$row[7]','$row[8]','$row[9]','$row[10]','$row[11]','$row[12]','$row[15]','$row[13]','$row[14]','$row[16]','$row[17]')";
+//                     // Close the prepared statements
+//                     $stmt_update->close();
+//                     $stmt_insert->close();
 
-//                     if ($conn->query($sql) === TRUE) {
-//                         echo "<script>alert('Record inserted successfully')</script>";
-//                     } else {
-//                         echo "Error: " . $sql . "<br>" . $conn->error;
-//                     }
+//                     // Close the file handle
+//                     fclose($file_handle);
+
+//                     // Optionally, you can delete the uploaded file after processing
+//                     unlink($upload_file);
+//                 } else {
+//                     echo "Session ID not set.";
 //                 }
-
-//                 echo "<script>alert('File uploaded and data processed successfully.')</script>";
-//                 echo "<script>window.location.replace('next.php');</script>";
+//             } else {
+//                 echo "Failed to open the CSV file.";
 //             }
 //         } else {
 //             echo "<script>alert('Error uploading file.')</script>";
@@ -131,31 +163,28 @@ if (!$conn) {
 //     echo "Check Again";
 // }
 
-if (isset($_REQUEST['csv_upload'])) {
+if (isset($_POST['csv_upload'])) {
     if (isset($_FILES["csv_file"]) && $_FILES["csv_file"]["error"] == 0) {
         // Define the path to store the uploaded CSV file
         $upload_dir = "uploads/csv/";
         $upload_file = $upload_dir . basename($_FILES["csv_file"]["name"]);
 
-        // Check if the file already exists
-        // if (file_exists($upload_file)) {
-        //     echo "<script>alert('File already exists.')</script>";
-        // } 
-        if ($upload_file) {
-            // Move the uploaded file to the specified directory
-            if (move_uploaded_file($_FILES["csv_file"]["tmp_name"], $upload_file)) {
-                // Process the CSV file and insert/update data into the database
-                $csv_data = array_map('str_getcsv', file($upload_file));
+        // Move the uploaded file to the specified directory
+        if (move_uploaded_file($_FILES["csv_file"]["tmp_name"], $upload_file)) {
+            // Open the CSV file for reading
+            $file_handle = fopen($upload_file, 'r');
 
-                // Skip the first row as it contains headers
-                $header = array_shift($csv_data);
+            // Check if the file was opened successfully
+            if ($file_handle !== false) {
+                // Skip the header row
+                $header = fgetcsv($file_handle, 4000, ',');
 
                 // Check if the session ID is available
                 $session_id = $_SESSION['new_question_id'];
 
                 if (isset($session_id)) {
-                    // Update the 2nd row based on 'exam_id'
-                    $sql = "UPDATE `exam_question` SET                               
+                    // Prepare the SQL statement for updating
+                    $update_sql = "UPDATE `exam_question` SET                               
                             `exam_ques`=?, 
                             `opt1`=?, 
                             `opt2`=?, 
@@ -164,108 +193,135 @@ if (isset($_REQUEST['csv_upload'])) {
                             `corect_opt`=?, 
                             `marks`=?, 
                             `solution`=?, 
-                            `status`=?
+                            `status`=?,
+                            `level`=?,
+                            `year`=?
                             WHERE `id`=?";
 
-                    $stmt = $conn->prepare($sql);
+                    $stmt_update = $conn->prepare($update_sql);
+
                     $insertedRecords = 0;
-                    foreach ($csv_data as $key => $row) {
-                        // print_r($key);
-                        // echo
-                        // Assuming 'exam_id' is in the last column
-                        $exam_id = $row[count($row) - 1];
+                    // Prepare the SQL statement for inserting
+                    $insert_sql = "INSERT INTO `exam_question`(`org_id`, `class_id`, `subject_id`, `section_id`, `chapter_id`, `sub_chapter_id`, `exam_id`, `exam_type`, `exam_ques`, `opt1`, `opt2`, `opt3`, `opt4`, `corect_opt`, `marks`, `solution`, `status`, `level`, `year`) 
+                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-                        if ($key == 0) {
-                            // This is the 2nd row, update it
-                            $stmt->bind_param(
-                                "ssssssssss",
-                                $row[0],
-                                $row[1],
-                                $row[2],
-                                $row[3],
-                                $row[4],
-                                $row[7],
-                                $row[5],
-                                $row[6],
-                                $row[8],
-                                $session_id
-                            );
+                    $stmt_insert = $conn->prepare($insert_sql);
 
-                            if ($stmt->execute()) {
-                                echo "<script>alert('Record updated successfully')</script>";
+                    // Read each line of the CSV file
+                    $skipFirstRow = true;
+                    while (($data_csv = fgetcsv($file_handle, 4000, ',')) !== FALSE) {
+                        if (empty($data_csv[0])) {
+                            continue;
+                        }
+
+                        if (count($data_csv) == count($header)) {
+
+                            if ($skipFirstRow) {
+                                $skipFirstRow = false;
+                                // This is the 2nd row, update it
+                                $stmt_update->bind_param(
+                                    "ssssssssssss",
+                                    $data_csv[0],
+                                    $data_csv[1],
+                                    $data_csv[2],
+                                    $data_csv[3],
+                                    $data_csv[4],
+                                    $data_csv[7],
+                                    $data_csv[5],
+                                    $data_csv[6],
+                                    $data_csv[8],
+                                    $data_csv[9],
+                                    $data_csv[10],
+                                    $session_id
+                                );
+
+                                if ($stmt_update->execute()) {
+                                    echo "<script>alert('Record updated successfully')</script>";
+                                } else {
+                                    echo "Error updating record: " . $stmt_update->error;
+                                }
                             } else {
-                                echo "Error updating record: " . $stmt->error;
-                            }
-                        } else if ($key > 0) {
+                                // This is not the 2nd row, insert it
+                                $get_data = "select * from exam_question where id = {$_SESSION['new_question_id']}";
+                                $result = mysqli_query($conn, $get_data);
 
-                            $get_data = "select * from exam_question where id = {$_SESSION['new_question_id']}";
-                            $result = mysqli_query($conn, $get_data);
+                                $i = 1;
 
-                            $i = 1;
+                                if (mysqli_num_rows($result) > 0) {
+                                    // output data of each row
 
-                            if (mysqli_num_rows($result) > 0) {
-                                // output data of each row
+                                    while ($row11 = mysqli_fetch_assoc($result)) {
 
-                                while ($row11 = mysqli_fetch_assoc($result)) {
-
-                                    $sql = "INSERT INTO `exam_question`(`org_id`, `class_id`, `subject_id`, `section_id`, `chapter_id`, `sub_chapter_id`, `exam_id`, `exam_type`, `exam_ques`, `opt1`, `opt2`, `opt3`, `opt4`, `corect_opt`, `marks`, `solution`, `status`) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-                                    $stmt = $conn->prepare($sql);
-
-                                    $stmt->bind_param(
-                                        "sssssssssssssssss",
-                                        $row11["org_id"],
-                                        $row11["class_id"],
-                                        $row11["subject_id"],
-                                        $row11["section_id"],
-                                        $row11["chapter_id"],
-                                        $row11["sub_chapter_id"],
-                                        $row11["exam_id"],
-                                        $row11["exam_type"],
-                                        $row[0],
-                                        $row[1],
-                                        $row[2],
-                                        $row[3],
-                                        $row[4],
-                                        $row[7],
-                                        $row[5],
-                                        $row[6],
-                                        $row[8]
-                                    );
-
-                                    if ($stmt->execute()) {
-                                        $insertedRecord = array(
-                                            'exam_ques' => $row[0],
-                                            'opt1' => $row[1],
-                                            'opt2' => $row[2],
-                                            'opt3' => $row[3],
-                                            'opt4' => $row[4],
-                                            'corect_opt' => $row[7],
-                                            'marks' => $row[5],
-                                            'solution' => $row[6],
-                                            'status' => $row[8]
+                                        $sql = "INSERT INTO `exam_question`(`org_id`, `class_id`, `subject_id`, `section_id`, `chapter_id`, `sub_chapter_id`, `exam_id`, `exam_type`, `exam_ques`, `opt1`, `opt2`, `opt3`, `opt4`, `corect_opt`, `marks`, `solution`, `status`, `level`, `year`) 
+                                                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                        $stmt_insert->bind_param(
+                                            "sssssssssssssssssss",
+                                            $row11["org_id"],
+                                            $row11["class_id"],
+                                            $row11["subject_id"],
+                                            $row11["section_id"],
+                                            $row11["chapter_id"],
+                                            $row11["sub_chapter_id"],
+                                            $row11["exam_id"],
+                                            $row11["exam_type"],
+                                            $data_csv[0],
+                                            $data_csv[1],
+                                            $data_csv[2],
+                                            $data_csv[3],
+                                            $data_csv[4],
+                                            $data_csv[7],
+                                            $data_csv[5],
+                                            $data_csv[6],
+                                            $data_csv[8],
+                                            $data_csv[9],
+                                            $data_csv[10]
                                         );
-                                        $insertedRecordDetails[] = $insertedRecord;
-                                        $insertedRecords++;
-                                        // echo "<script>alert('Record inserted successfully')</script>";
-                                    } else {
-                                        echo "Error inserting record: " . $stmt->error;
+
+                                        if ($stmt_insert->execute()) {
+                                            $insertedRecord = array(
+                                                'exam_ques' => $data_csv[0],
+                                                'opt1' => $data_csv[1],
+                                                'opt2' => $data_csv[2],
+                                                'opt3' => $data_csv[3],
+                                                'opt4' => $data_csv[4],
+                                                'corect_opt' => $data_csv[7],
+                                                'marks' => $data_csv[5],
+                                                'solution' => $data_csv[6],
+                                                'status' => $data_csv[8],
+                                                'level' => $data_csv[9],
+                                                'year' => $data_csv[10]
+                                            );
+                                            $insertedRecordDetails[] = $insertedRecord;
+                                            $insertedRecords++;
+                                            // echo "<script>alert('Record inserted successfully')</script>";
+                                        } else {
+                                            echo "Error inserting record: " . $stmt->error;
+                                        }
                                     }
                                 }
                             }
-
-                            // This is not the 2nd row, insert it
-                            // echo "<script>alert('Record inserted successfully')</script>";
+                        } else {
+                            echo "Number of columns in CSV does not match header.";
                         }
                     }
 
-                    // echo "<script>alert('File uploaded and data processed successfully.')</script>";
-                    // echo "<script>window.location.replace('next_page.php');</script>";
+                    // Close the prepared statements
+                    $stmt_update->close();
+                    $stmt_insert->close();
+
+                    // Close the file handle
+                    fclose($file_handle);
+
+                    // Optionally, you can delete the uploaded file after processing
+                    unlink($upload_file);
+                } else {
+                    echo "Session ID not set.";
                 }
             } else {
-                echo "<script>alert('Error uploading file.')</script>";
+                echo "Failed to open the CSV file.";
             }
+        } else {
+            echo "<script>alert('Error uploading file.')</script>";
         }
     } else {
         echo "<script>alert('No file uploaded or an error occurred.')</script>";
@@ -274,7 +330,7 @@ if (isset($_REQUEST['csv_upload'])) {
     echo "Check Again";
 }
 
-
+?>
 
 
 ?>
@@ -333,32 +389,7 @@ if (isset($_REQUEST['csv_upload'])) {
                                                 <?php
 
 
-                                                // $sql = "SELECT *, eq.id as eq_id
-                                                // FROM exam_question eq
-                                                // INNER JOIN chapter_sub_name sub_chap ON eq.sub_chapter_id = sub_chap.id
-                                                // INNER JOIN chapter ch ON sub_chap.chapter_id = ch.id
-                                                // INNER JOIN exam_type et ON eq.exam_type = et.id
-                                                // INNER JOIN sub_section sub_sec ON eq.section_id = sub_sec.id
-                                                // INNER JOIN subject sb ON eq.subject_id = sb.id
-                                                // INNER JOIN class cls ON eq.class_id = cls.id
-                                                // INNER JOIN exam_title ex_title ON eq.exam_id = ex_title.id
-                                                // INNER JOIN organisation org ON eq.org_id = org.id
-                                                // WHERE eq.id = {$_SESSION['new_question_id']}
-                                                // ";
-                                                // $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
-
-                                                //  $sql = "SELECT *, eq.id as eq_id
-                                                //     FROM exam_question eq
-                                                //     INNER JOIN chapter_sub_name sub_chap ON eq.sub_chapter_id = sub_chap.id
-                                                //     INNER JOIN chapter ch ON sub_chap.chapter_id = ch.id
-                                                //     INNER JOIN exam_type et ON eq.exam_type = et.id
-                                                //     INNER JOIN sub_section sub_sec ON eq.section_id = sub_sec.id
-                                                //     INNER JOIN subject sb ON eq.subject_id = sb.id
-                                                //     INNER JOIN class cls ON eq.class_id = cls.id
-                                                //     INNER JOIN exam_title ex_title ON eq.exam_id = ex_title.id
-                                                //     INNER JOIN organisation org ON eq.org_id = org.id
-                                                //     WHERE eq.id = {$_SESSION['new_question_id']}";
 
                                                 $sql = "select eq.*, eq.id as eq_id,
                                                 sub_chap.*,
@@ -385,7 +416,10 @@ if (isset($_REQUEST['csv_upload'])) {
 
 
                                                 $result = mysqli_query($conn, $sql);
-
+                                                if (!$result) {
+                                                    // Handle the query error
+                                                    echo "Error: " . mysqli_error($conn);
+                                                }
                                                 $i = 1;
 
                                                 if (mysqli_num_rows($result) > 0) {
@@ -405,10 +439,12 @@ if (isset($_REQUEST['csv_upload'])) {
                                                             <td><?php echo $row['exam__type_name']; ?></td>
                                                             <td><?php echo $row['chapter_name']; ?></td>
                                                             <td><?php echo $row['chapter_sub_name']; ?></td>
-                                                            <!-- <td>
-                                                            <a href="update_brd.php?org_id=<?php echo $row['id']; ?>" title="Edit" class="mr-1"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                            <a href="det_brd.php?org_id=<?php echo $row['id']; ?>" title="Delete" class=""><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                                        </td> -->
+                                                            <!-- <td> -->
+                                                            <!-- <a href="update_brd.php?org_id=<?php // echo $row['id']; 
+                                                                                                ?>" title="Edit" class="mr-1"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                            <a href="det_brd.php?org_id=<?php echo $row['id']; ?>" title="Delete" class=""><i class="fa fa-trash" aria-hidden="true"></i></a> -->
+
+                                                            <!-- </td> -->
 
                                                         </tr>
 
@@ -416,7 +452,7 @@ if (isset($_REQUEST['csv_upload'])) {
                                                 <?php $i++;
                                                     }
                                                 } else {
-                                                    echo "0 results";
+                                                    // echo "0 results";
                                                 }
 
 
@@ -453,48 +489,63 @@ if (isset($_REQUEST['csv_upload'])) {
                                         <div class="col-md-12">
                                             <form action="" method="post" enctype="multipart/form-data">
                                                 <div class="row">
-                                                  
-                                                    <div class="col-md-6">
+
+                                                    <div class="col-md-12">
                                                         <!-- Display the count of inserted records -->
-                                                        <?php // if ($insertedRecords > 0) : ?>
-                                                            <!-- <div class="alert alert-success">
-                                                                <?php // echo "Inserted " . $insertedRecords . " records into the database."; ?>
+                                                        <?php // if ($insertedRecords > 0) : 
+                                                        ?>
+                                                        <!-- <div class="alert alert-success">
+                                                                <?php // echo "Inserted " . $insertedRecords . " records into the database."; 
+                                                                ?>
                                                             </div> -->
-                                                        <?php // endif; ?>
+                                                        <?php // endif; 
+                                                        ?>
 
                                                         <!-- Display the details of inserted records in a table -->
                                                         <?php if (!empty($insertedRecordDetails)) : ?>
                                                             <h3>Inserted Record Details:</h3>
-                                                            <table class="table table-bordered">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>exam_ques</th>
-                                                                        <th>opt1</th>
-                                                                        <th>opt2</th>
-                                                                        <th>opt3</th>
-                                                                        <th>opt4</th>
-                                                                        <th>corect_opt</th>
-                                                                        <th>marks</th>
-                                                                        <th>solution</th>
-                                                                        <th>status</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <?php foreach ($insertedRecordDetails as $record) : ?>
+
+
+                                                            <div class="table-responsive ">
+                                                                <table id="manage_org" class="table table-bordered">
+                                                                    <thead>
                                                                         <tr>
-                                                                            <td><?php echo $record['exam_ques']; ?></td>
-                                                                            <td><?php echo $record['opt1']; ?></td>
-                                                                            <td><?php echo $record['opt2']; ?></td>
-                                                                            <td><?php echo $record['opt3']; ?></td>
-                                                                            <td><?php echo $record['opt4']; ?></td>
-                                                                            <td><?php echo $record['corect_opt']; ?></td>
-                                                                            <td><?php echo $record['marks']; ?></td>
-                                                                            <td><?php echo $record['solution']; ?></td>
-                                                                            <td><?php echo $record['status']; ?></td>
+                                                                            <th>exam_ques</th>
+                                                                            <th>opt1</th>
+                                                                            <th>opt2</th>
+                                                                            <th>opt3</th>
+                                                                            <th>opt4</th>
+                                                                            <th>corect_opt</th>
+                                                                            <th>marks</th>
+                                                                            <th>solution</th>
+                                                                            <th>level</th>
+                                                                            <th>year</th>
+                                                                            <th>status</th>
+                                                                           
                                                                         </tr>
-                                                                    <?php endforeach; ?>
-                                                                </tbody>
-                                                            </table>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <?php foreach ($insertedRecordDetails as $record) : ?>
+                                                                            <tr>
+                                                                                <td><textarea name="" id="" cols="30" rows=""><?php echo $record['exam_ques']; ?></textarea> </td>
+                                                                                <td><textarea name="" id="" cols="30" rows=""> <?php echo $record['opt1']; ?></textarea></td>
+                                                                                <td><textarea name="" id="" cols="30" rows=""><?php echo $record['opt2']; ?></textarea> </td>
+                                                                                <td><textarea name="" id="" cols="30" rows=""><?php echo $record['opt3']; ?></textarea> </td>
+                                                                                <td><textarea name="" id="" cols="30" rows=""><?php echo $record['opt4']; ?></textarea> </td>
+                                                                                <td><textarea name="" id="" cols="30" rows=""><?php echo $record['corect_opt']; ?></textarea> </td>
+                                                                                <td><textarea name="" id="" cols="30" rows=""><?php echo $record['marks']; ?></textarea> </td>
+                                                                                <td><textarea name="" id="" cols="30" rows=""><?php echo $record['solution']; ?></textarea> </td>
+                                                                                <td><textarea name="" id="" cols="30" rows=""><?php echo $record['level']; ?></textarea></td>
+                                                                                <td><textarea name="" id="" cols="30" rows=""><?php echo $record['year']; ?></textarea></td>
+                                                                                <td><textarea name="" id="" cols="30" rows=""><?php echo $record['status']; ?></textarea></td>
+                                                                            </tr>
+                                                                        <?php endforeach; ?>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+
+
+
                                                         <?php endif; ?>
                                                     </div>
                                                 </div>

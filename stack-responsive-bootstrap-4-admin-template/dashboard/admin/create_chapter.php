@@ -16,7 +16,7 @@ function createSlug($string)
     $string = trim($string, '-'); // Trim hyphens from the beginning and end
     return $string;
 }
-if (isset($_POST['chapter_save'])) {
+if (isset($_POST['org_id']) || isset($_POST['chapter_title']) || isset($_POST['subject_id']) || isset($_POST['class_id'])) {
 
     $chapter_title = $_REQUEST['chapter_title'];
     $org_id = $_REQUEST['org_id'];
@@ -50,24 +50,14 @@ if (isset($_POST['chapter_save'])) {
             <div class="content-header-left col-md-6 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="breadcrumb-wrapper col-12">
-                        <!-- <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="index.html">Home</a>
-                  </li>
-                  <li class="breadcrumb-item"><a href="#">Form Layouts</a>
-                  </li>
-                  <li class="breadcrumb-item active"><a href="#">Basic Forms</a>
-                  </li>
-                </ol> -->
+                       
                     </div>
                 </div>
                 <!-- <h3 class="content-header-title mb-0">Basic Forms</h3> -->
             </div>
             <div class="content-header-right col-md-6 col-12">
                 <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
-                    <!-- <div class="btn-group" role="group">
-                        <button class="btn btn-outline-primary dropdown-toggle dropdown-menu-right" id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather icon-settings icon-left"></i> Settings</button>
-                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"><a class="dropdown-item" href="card-bootstrap.html">Bootstrap Cards</a><a class="dropdown-item" href="component-buttons-extended.html">Buttons Extended</a></div>
-                    </div><a class="btn btn-outline-primary" href="full-calender-basic.html"><i class="feather icon-mail"></i></a><a class="btn btn-outline-primary" href="timeline-center.html"><i class="feather icon-pie-chart"></i></a> -->
+                  
                 </div>
             </div>
         </div>
@@ -93,7 +83,7 @@ if (isset($_POST['chapter_save'])) {
                                     <div class="card-text">
                                         <!-- <p>This is the most basic and default form having form sections. To add form section use <code>.form-section</code> class with any heading tags. This form has the buttons on the bottom left corner which is the default position.</p> -->
                                     </div>
-                                    <form class="form" method="POST">
+                                    <form class="form" id="chapterForm" method="POST">
                                         <div class="form-body">
                                             <h4 class="form-section"><i class="feather icon-user"></i> </h4>
                                             <div class="row">
@@ -180,42 +170,85 @@ if (isset($_POST['chapter_save'])) {
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+   $(document).ready(function() {
+    // Function to populate classes based on organization
+    function populateClasses(orgId) {
+        $.ajax({
+            type: "POST",
+            url: "ajax/get_class.php",
+            data: {
+                org_id: orgId
+            },
+            dataType: "json",
+            success: function(data) {
+                $("#class_id").html(data.classes);
+            }
+        });
+    }
+
+    // Function to populate subjects based on class
+    function populateSubjects(classId) {
+        $.ajax({
+            type: "POST",
+            url: "ajax/get_subject.php",
+            data: {
+                class_id: classId
+            },
+            dataType: "json",
+            success: function(data) {
+                $("#subject_id").html(data.subject);
+            }
+        });
+    }
+
+    // Trigger the change event for org_id to load classes on page load
+    var orgId = $("#org_id").val();
+    populateClasses(orgId);
+
+    // Trigger the change event for class_id to load subjects on page load
+    var classId = $("#class_id").val();
+    populateSubjects(classId);
+
+    // Handle change events for org_id and class_id
+    $("#org_id").change(function() {
+        var orgId = $(this).val();
+        populateClasses(orgId);
+    });
+
+    $("#class_id").change(function() {
+        var classId = $(this).val();
+        populateSubjects(classId);
+    });
+});
+
+</script>
+
+
+<script>
     $(document).ready(function() {
-        // When organization or role is selected, fetch classes
-        $("#org_id").change(function() {
-            var orgId = $("#org_id").val();
+        $('#chapterForm').submit(function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Serialize the form data
+            var formData = $('#chapterForm').serialize();
+            console.log(formData);
 
             $.ajax({
-                type: "POST",
-                url: "ajax/get_class.php", // Path to the fetch_classes.php script
-                data: {
-                    org_id: orgId
+                type: 'POST',
+                url: 'create_chapter.php', // Replace with the correct path to your PHP script
+                data: formData,
+                success: function(response) {
+                    console.log(response);
+                    // Handle the response from the PHP script here
+                    alert('New Chapter Created');
+                    // window.location.replace('create_exam.php');
                 },
-                dataType: "json",
-                success: function(data) {
-                    // Populate class select
-                    $("#class_id").html(data.classes);
+                error: function(xhr, status, error) {
+                    // Handle errors here
+                    console.error(xhr.responseText);
                 }
             });
         });
-
-        $("#class_id").change(function() {
-            var class_id = $("#class_id").val();
-
-            $.ajax({
-                type: "POST",
-                url: "ajax/get_subject.php", // Path to the fetch_classes.php script
-                data: {
-                    class_id: class_id
-                },
-                dataType: "json",
-                success: function(data) {
-                    // Populate class select
-                    $("#subject_id").html(data.subject);
-                }
-            });
-        });
-
     });
 </script>
 
