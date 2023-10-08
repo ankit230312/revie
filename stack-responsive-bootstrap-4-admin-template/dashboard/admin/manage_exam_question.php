@@ -190,7 +190,11 @@ if (isset($_REQUEST['csv_up'])) {
                                                                 </select>
                                                             </td>
                                                             <td><?php echo $row['corect_opt']; ?></td>
-                                                            <td><?php echo $row['solution']; ?></td>
+                                                            <td>
+                                                            <textarea name="" disabled id="" cols="30" rows="">  <?php echo $row['solution']; ?></textarea>
+                                                                <?php // echo $row['solution']; ?>
+                                                            
+                                                            </td>
                                                             <td class="no_pd"><?php echo $row['marks'] . " " . "Marks"; ?></td>
                                                             <td>
                                                                 <a href="update_designation.php?org_id=<?php echo $row['org_id']; ?>" title="Edit" class="mr-1"><i class="fa fa-pencil" aria-hidden="true"></i></a>

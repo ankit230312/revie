@@ -108,16 +108,7 @@ if (!$conn) {
 
 
                                             </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>S.no</th>
-                                                    <th>Test
-                                                        list
-                                                    </th>
-
-                                                    <th>Action</th>
-                                                </tr>
-                                            </tfoot>
+                                       
                                         </table>
                                     </div>
 

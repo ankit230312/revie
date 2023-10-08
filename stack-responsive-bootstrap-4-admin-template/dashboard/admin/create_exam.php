@@ -16,13 +16,13 @@ function createSlug($string)
     $string = trim($string, '-'); // Trim hyphens from the beginning and end
     return $string;
 }
-if (isset($_POST['exam_save'])) {
+if (isset($_POST['exam_title'])  || isset($_POST['org_id'])) {
 
     $exam_title = $_REQUEST['exam_title'];
     $org_id = $_REQUEST['org_id'];
     // $class_id = $_REQUEST['class_id'];
     // $subject_id = $_REQUEST['subject_id'];
-  
+
     // $class_id = $_REQUEST['class_id'];
     $slug = createSlug($exam_title);
 
@@ -32,9 +32,9 @@ if (isset($_POST['exam_save'])) {
     VALUES ('$org_id','$exam_title','$slug')";
 
     if (mysqli_query($conn, $sql)) {
-      
-        echo "<script>alert('New Exam Created')</script>";
-        echo "<script>window.location.replace('create_exam.php');</script>";
+
+        // echo "<script>alert('New Exam Created')</script>";
+        // echo "<script>window.location.replace('create_exam.php');</script>";
     } else {
         //   echo "Error: " . $sql . "<br>" . mysqli_error($conn);
 
@@ -95,7 +95,7 @@ if (isset($_POST['exam_save'])) {
                                     <div class="card-text">
                                         <!-- <p>This is the most basic and default form having form sections. To add form section use <code>.form-section</code> class with any heading tags. This form has the buttons on the bottom left corner which is the default position.</p> -->
                                     </div>
-                                    <form class="form" method="POST">
+                                    <form class="form" method="POST" id="examForm">
                                         <div class="form-body">
                                             <h4 class="form-section"><i class="feather icon-user"></i> User Info</h4>
                                             <div class="row">
@@ -119,29 +119,12 @@ if (isset($_POST['exam_save'])) {
                                                                 }
                                                             } ?>
                                                         </select>
-                                                        <!-- <input type="text" id="projectinput1" class="form-control" placeholder="First Name" name="u_fname"> -->
-                                                    </div>
-                                                </div>
-                                           
 
-                                                <!-- <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="projectinput1">Class</label>
-                                                        <select class="form-control" name="class_id" id="class_id">
-                                                           
-                                                        </select>
-                                                        
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="projectinput1">Subject</label>
-                                                        <select class="form-control" name="subject_id" id="subject_id">
-                                                           
-                                                        </select>
-                                                        
-                                                    </div>
-                                                </div> -->
+
+
+
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="projectinput2">Exam Title</label>
@@ -158,7 +141,7 @@ if (isset($_POST['exam_save'])) {
                                                 <button type="reset" class="btn btn-warning mr-1">
                                                     <i class="feather icon-x"></i> Cancel
                                                 </button>
-                                                <button type="submit" class="btn btn-primary" name="exam_save">
+                                                <button type="submit" class="btn btn-primary" id="exam_save" name="exam_save">
                                                     <i class="fa fa-check-square-o"></i> Save
                                                 </button>
                                             </div>
@@ -186,40 +169,72 @@ if (isset($_POST['exam_save'])) {
 <!-- ... (Your existing HTML and PHP code) -->
 
 <script>
-$(document).ready(function() {
-    // When organization is selected, fetch classes
-    $("#org_id").change(function() {
-        var orgId = $(this).val();
-        
-        $.ajax({
-            type: "POST",
-            url: "ajax/get_class.php",
-            data: { org_id: orgId },
-            dataType: "json",
-            success: function(data) {
-                $("#class_id").html(data.classes);
-                $("#subject_id").html('<option value="">Select Subject</option>'); // Clear subjects when class changes
-            }
+    $(document).ready(function() {
+        // When organization is selected, fetch classes
+        $("#org_id").change(function() {
+            var orgId = $(this).val();
+
+            $.ajax({
+                type: "POST",
+                url: "ajax/get_class.php",
+                data: {
+                    org_id: orgId
+                },
+                dataType: "json",
+                success: function(data) {
+                    $("#class_id").html(data.classes);
+                    $("#subject_id").html('<option value="">Select Subject</option>'); // Clear subjects when class changes
+                }
+            });
+        });
+
+        // When class is selected, fetch subjects
+        $("#class_id").change(function() {
+            var classId = $(this).val();
+
+            $.ajax({
+                type: "POST",
+                url: "ajax/get_subject.php", // Create a similar PHP file to handle subject retrieval
+                data: {
+                    class_id: classId
+                },
+                dataType: "json",
+                success: function(data) {
+
+                    $("#subject_id").html(data.subject);
+                }
+            });
         });
     });
-
-    // When class is selected, fetch subjects
-    $("#class_id").change(function() {
-        var classId = $(this).val();
-
-        $.ajax({
-            type: "POST",
-            url: "ajax/get_subject.php", // Create a similar PHP file to handle subject retrieval
-            data: { class_id: classId },
-            dataType: "json",
-            success: function(data) {
-                
-                $("#subject_id").html(data.subject);
-            }
-        });
-    });
-});
 </script>
+<script>
+    $(document).ready(function() {
+        $('#examForm').submit(function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Serialize the form data
+            var formData = $('#examForm').serialize();
+            console.log(formData);
+
+            $.ajax({
+                type: 'POST',
+                url: 'create_exam.php', // Replace with the correct path to your PHP script
+                data: formData,
+                success: function(response) {
+                    console.log(response);
+                    // Handle the response from the PHP script here
+                    alert('New Exam Created');
+                    // window.location.replace('create_exam.php');
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors here
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
 
 <!-- ... (Rest of your HTML code) -->
 
@@ -227,5 +242,3 @@ $(document).ready(function() {
 
 
 <!-- ... (Rest of your HTML code) -->
-
-

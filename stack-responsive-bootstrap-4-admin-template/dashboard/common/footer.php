@@ -17,6 +17,7 @@
  <script src="../assets/app-assets/js/core/app.min.js"></script>
  <script src="../assets/app-assets/js/scripts/customizer.min.js"></script>
  <!-- END: Theme JS-->
+ <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 
  <!-- BEGIN: Page JS-->
  <script src="../assets/app-assets/js/scripts/cards/card-statistics.min.js"></script>

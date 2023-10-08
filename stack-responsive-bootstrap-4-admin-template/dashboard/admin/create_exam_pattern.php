@@ -3,7 +3,7 @@
 <?php
 include "db.php";
 
- $conn = mysqli_connect($servername, $username, $password, $dbname);
+$conn = mysqli_connect($servername, $username, $password, $dbname);
 // Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -27,11 +27,11 @@ if (isset($_POST['exam_que_save'])) {
     $exam_type = $_REQUEST['exam_type'];
     $chapter_id = $_REQUEST['chapter_id'];
     $sub_chapter_id = $_REQUEST['sub_chapter_id'];
-   
-   
+
+
 
     // $exam_que = $_REQUEST['exam_que'];
-    
+
     // $opt1 = $_REQUEST['opt1'];
     // $opt2 = $_REQUEST['opt2'];
     // $opt3 = $_REQUEST['opt3'];
@@ -49,11 +49,11 @@ if (isset($_POST['exam_que_save'])) {
 
     if (mysqli_query($conn, $sql)) {
         $question_id = mysqli_insert_id($conn);
-       
-       
+
+
         $_SESSION['new_question_id'] = $question_id;
 
-        
+
 
         echo "<script>alert('Question Created')</script>";
         echo "<script>window.location.replace('next_page.php');</script>";
@@ -125,7 +125,7 @@ if (isset($_POST['exam_que_save'])) {
                                                         <label for="projectinput1">Organisation Id</label>
                                                         <select class="form-control" name="org_id" id="org_id">
                                                             <?php
-                                                         
+
                                                             $sql = "SELECT * FROM organisation";
                                                             $result = mysqli_query($conn, $sql);
                                                             if (mysqli_num_rows($result) > 0) {
@@ -215,7 +215,7 @@ if (isset($_POST['exam_que_save'])) {
                                                         <label for="projectinput1">Sub Chapter</label>
                                                         <select class="form-control" name="sub_chapter_id" id="sub_chapter_id">
                                                             <option value=""> Select Sub Chapter</option>
-                                                            
+
                                                         </select>
                                                     </div>
                                                 </div>
@@ -223,64 +223,103 @@ if (isset($_POST['exam_que_save'])) {
 
                                             </div>
 
-                                            <!-- <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="projectinput2">Exam Question</label>
-                                                        <input type="text" id="exam_que" class="form-control" placeholder="Exam Question" name="exam_que">
+                                            <div class="single_mcq">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Exam Question</label>
+                                                            <input type="text" id="exam_que" class="form-control" placeholder="Exam Question" name="exam_que">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Option 1</label>
+                                                            <input type="text" id="opt1" class="form-control" placeholder="Option 1" name="opt1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Option 2</label>
+                                                            <input type="text" id="opt2" class="form-control" placeholder="Designation Title" name="opt2">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Option 3</label>
+                                                            <input type="text" id="opt3" class="form-control" placeholder="Designation Title" name="opt3">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Option 4</label>
+                                                            <input type="text" id="opt4" class="form-control" placeholder="Designation Title" name="opt4">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Correct Option</label>
+                                                            <input type="text" id="opt1" class="form-control" placeholder="Correct Option" name="correct_opt">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Marks</label>
+                                                            <input type="text" id="marks" class="form-control" placeholder="Marks" name="marks">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Solution</label>
+                                                            <textarea id="solution" class="form-control" placeholder="Solution" name="solution"></textarea>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label for="projectinput2">Option 1</label>
-                                                        <input type="text" id="opt1" class="form-control" placeholder="Option 1" name="opt1">
+                                            <div class="single_numericl">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Exam Question</label>
+                                                            <input type="text" id="exam_que" class="form-control" placeholder="Exam Question" name="exam_que">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label for="projectinput2">Option 2</label>
-                                                        <input type="text" id="opt2" class="form-control" placeholder="Designation Title" name="opt2">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Correct Option</label>
+                                                            <input type="text" id="opt1" class="form-control" placeholder="Correct Option" name="correct_opt">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label for="projectinput2">Option 3</label>
-                                                        <input type="text" id="opt3" class="form-control" placeholder="Designation Title" name="opt3">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Marks</label>
+                                                            <input type="text" id="marks" class="form-control" placeholder="Marks" name="marks">
+                                                        </div>
                                                     </div>
+
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label for="projectinput2">Option 4</label>
-                                                        <input type="text" id="opt4" class="form-control" placeholder="Designation Title" name="opt4">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="projectinput2">Correct Option</label>
-                                                        <input type="text" id="opt1" class="form-control" placeholder="Correct Option" name="correct_opt">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="projectinput2">Marks</label>
-                                                        <input type="text" id="marks" class="form-control" placeholder="Marks" name="marks">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="projectinput2">Solution</label>
+                                                            <textarea id="solution" class="form-control" placeholder="Solution" name="solution"></textarea>
+                                                        </div>
                                                     </div>
                                                 </div>
 
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="projectinput2">Solution</label>
-                                                        <textarea id="solution" class="form-control" placeholder="Solution" name="solution"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div> -->
+
+
 
 
                                         </div>

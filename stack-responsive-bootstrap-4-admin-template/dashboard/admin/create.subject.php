@@ -16,7 +16,7 @@ function createSlug($string)
     $string = trim($string, '-'); // Trim hyphens from the beginning and end
     return $string;
 }
-if (isset($_POST['class_save'])) {
+if (isset($_POST['sub_title']) || isset($_POST['org_id']) || isset($_POST['class_id'])) {
 
     $sub_title = $_REQUEST['sub_title'];
     $org_id = $_REQUEST['org_id'];
@@ -94,7 +94,7 @@ if (isset($_POST['class_save'])) {
                                     <div class="card-text">
                                         <!-- <p>This is the most basic and default form having form sections. To add form section use <code>.form-section</code> class with any heading tags. This form has the buttons on the bottom left corner which is the default position.</p> -->
                                     </div>
-                                    <form class="form" method="POST">
+                                    <form class="form" id='subjectForm' method="POST">
                                         <div class="form-body">
                                             <h4 class="form-section"><i class="feather icon-user"></i> User Info</h4>
                                             <div class="row">
@@ -219,6 +219,34 @@ if (isset($_POST['class_save'])) {
             });
         });
 
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#subjectForm').submit(function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Serialize the form data
+            var formData = $('#subjectForm').serialize();
+            console.log(formData);
+
+            $.ajax({
+                type: 'POST',
+                url: 'create.subject.php', // Replace with the correct path to your PHP script
+                data: formData,
+                success: function(response) {
+                    console.log(response);
+                    // Handle the response from the PHP script here
+                    alert('New subject Created');
+                    // window.location.replace('create_exam.php');
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors here
+                    console.error(xhr.responseText);
+                }
+            });
+        });
     });
 </script>
 
